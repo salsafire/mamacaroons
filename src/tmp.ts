@@ -63,7 +63,7 @@ const checker = new MacaroonChecker()
 console.log(easySafeMac.macaroon.inspect());
 console.log('Serialized: ' + easySafeMac.macaroon.serialize());
 console.log('identifier: ' + easySafeMac.macaroon.identifier);
-console.log('Valid: ' + checker.isValid(easySafeMac, secrets.get(easyMac.macaroon.identifier)));
+console.log('Valid: ' + checker.isMacaroonValid(easySafeMac, secrets.get(easyMac.macaroon.identifier)));
 
 console.log('values assigned => ', caveatAssignValueVerifier.values);
 console.log('RO values assigned => ', assignReadOnlyValueCaveatVerifier.values);

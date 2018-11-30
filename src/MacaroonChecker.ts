@@ -25,7 +25,7 @@ export default class MacaroonChecker {
         return this;
     }
 
-    isValid(macaroon: Macaroon, secret: any) {
+    isMacaroonValid(macaroon: Macaroon, secret: any) {
         const verifier = new MacaroonsVerifier(macaroon.macaroon);
         for (const check of this.checks) {
             if (typeof check === 'string') {
