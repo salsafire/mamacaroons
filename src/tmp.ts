@@ -47,7 +47,7 @@ const easySafeMac = easyMac
     .addCaveat(new TimeCaveat(new Date('2042-01-01T00:00')))
     .addCaveat(new AssignValueCaveat('userId', '1234'))
     .addCaveat(new AssignReadOnlyValueCaveat('email', 'first@email.com'))
-    .addCaveat(new AssignReadOnlyValueCaveat('email', 'throw-error@email.com'))
+    // .addCaveat(new AssignReadOnlyValueCaveat('email', 'throw-error@email.com'))
     .addCaveat(new ExchangeCaveat(['kraken:write', 'kraken:read', 'bitstamp:read']));
 
 const caveatAssignValueVerifier = new AssignValueCaveatVerifier();
