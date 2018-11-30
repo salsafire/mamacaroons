@@ -5,6 +5,7 @@ import { ExchangeCaveat, ExchangeCaveatVerifier } from './caveat/ExchangeCaveat'
 import { TimeCaveat, TimeCaveatVerifier } from './caveat/TimeCaveat';
 import { AssignReadOnlyValueCaveat, AssignReadOnlyValueCaveatVerifier } from './caveat/AssignReadOnlyValueCaveat';
 import { AssignArrayMergeCaveat, AssignArrayMergeCaveatVerifier } from './caveat/AssignArrayMergeCaveat';
+import { AssignArrayIntersectCaveat, AssignArrayIntersectCaveatVerifier } from './caveat/AssignArrayIntersectCaveat';
 
 const secrets = new Map()
     .set('publicSecretId1', 'you will not find me')
@@ -51,18 +52,26 @@ const easySafeMac = easyMac
     .addCaveat(new AssignArrayMergeCaveat('servers', ['server1']))
     .addCaveat(new AssignArrayMergeCaveat('servers', ['server2']))
     .addCaveat(new AssignArrayMergeCaveat('ips', ['127.0.0.1']))
+    .addCaveat(new AssignArrayIntersectCaveat('serversC', ['server1', 'server2']))
+    .addCaveat(new AssignArrayIntersectCaveat('serversC', ['server2']))
+    .addCaveat(new AssignArrayIntersectCaveat('ipsC', ['127.0.0.1','127.0.1.1']))
+    .addCaveat(new AssignArrayIntersectCaveat('ipsC', []))
+    .addCaveat(new AssignArrayIntersectCaveat('ipsC', ['127.0.0.1','127.0.1.1']))
+    .addCaveat(new AssignArrayIntersectCaveat('oC', ['hello']))
     // .addCaveat(new AssignReadOnlyValueCaveat('email', 'throw-error@email.com'))
     .addCaveat(new ExchangeCaveat(['kraken:write', 'kraken:read', 'bitstamp:read']));
 
 const caveatAssignValueVerifier = new AssignValueCaveatVerifier();
 const assignReadOnlyValueCaveatVerifier = new AssignReadOnlyValueCaveatVerifier();
 const assignArrayMergeCaveatVerifier = new AssignArrayMergeCaveatVerifier();
+const assignArrayIntersectCaveatVerifier = new AssignArrayIntersectCaveatVerifier();
 
 const checker = new MacaroonChecker()
     .addExactCheck('account', '3735928559')
     .addVerifier(caveatAssignValueVerifier)
     .addVerifier(assignReadOnlyValueCaveatVerifier)
     .addVerifier(assignArrayMergeCaveatVerifier)
+    .addVerifier(assignArrayIntersectCaveatVerifier)
     .addVerifier(TimeCaveatVerifier.getVerifyer())
     .addVerifier(new ExchangeCaveatVerifier('kraken', 'write'));
 
@@ -74,6 +83,7 @@ console.log('Valid: ' + checker.isMacaroonValid(easySafeMac, secrets.get(easyMac
 console.log('values assigned => ', caveatAssignValueVerifier.values);
 console.log('RO values assigned => ', assignReadOnlyValueCaveatVerifier.values);
 console.log('Array/merge values assigned => ', assignArrayMergeCaveatVerifier.values);
+console.log('Array/intersect values assigned => ', assignArrayIntersectCaveatVerifier.values);
 
 //
 //
