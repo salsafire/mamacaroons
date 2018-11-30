@@ -1,6 +1,6 @@
 import { CaveatInterface, CaveatVerifierInterface } from './CaveatInterface';
 
-export class AssignCaveatVerifier implements CaveatVerifierInterface {
+export class AssignValueCaveatVerifier implements CaveatVerifierInterface {
     public values: any = {};
 
     verify(caveat: string) {
@@ -15,7 +15,7 @@ export class AssignCaveatVerifier implements CaveatVerifierInterface {
     }
 }
 
-export class AssignCaveat implements CaveatInterface {
+export class AssignValueCaveat implements CaveatInterface {
     constructor(private key: string, private value: string) {
 
     }
