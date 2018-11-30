@@ -2,6 +2,7 @@ import Macaroon from './Macaroon';
 import MacaroonChecker from './MacaroonChecker';
 import { AssignCaveat, AssignCaveatVerifier } from './caveat/AssignCaveat';
 import { ExchangeCaveat, ExchangeCaveatVerifier } from './caveat/ExchangeCaveat';
+import { TimeCaveat, TimeCaveatVerifier } from './caveat/TimeCaveat';
 
 const secrets = new Map()
     .set('publicSecretId1', 'you will not find me')
@@ -28,9 +29,9 @@ const location = 'http://localhost';
 // or secret-key encryption; s
 
 
-const easyMac = Macaroon.create(location, secrets.get('publicSecretId1'), 'publicSecretId1');
+const easyMac = Macaroon.create(location, 'publicSecretId1', secrets.get('publicSecretId1'));
 
-const valid = easyMac.verifiy(secrets.get('publicSecretId1'));
+const valid = easyMac.verify(secrets.get('publicSecretId1'));
 console.log(valid);
 
 
@@ -42,7 +43,7 @@ console.log();
 
 const easySafeMac = easyMac
     .addExactCaveat('account', '3735928559')
-    .addSignedCaveat('time', '<', '2042-01-01T00:00')
+    .addCaveat(new TimeCaveat(new Date('2042-01-01T00:00')))
     .addCaveat(new AssignCaveat('userId', '1234'))
     .addCaveat(new ExchangeCaveat(['kraken:write', 'kraken:read', 'bitstamp:read']));
 
@@ -51,7 +52,7 @@ const caveatAssignVerifier = new AssignCaveatVerifier();
 const checker = new MacaroonChecker()
     .addExactCheck('account', '3735928559')
     .addVerifier(caveatAssignVerifier)
-    .addVerifier(require('macaroons.js').verifier.TimestampCaveatVerifier)
+    .addVerifier(TimeCaveatVerifier.getVerifyer())
     .addVerifier(new ExchangeCaveatVerifier('kraken', 'write'));
 
 console.log(easySafeMac.macaroon.inspect());

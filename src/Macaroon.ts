@@ -6,9 +6,9 @@ const MacaroonsBuilder = require('macaroons.js').MacaroonsBuilder;
 
 
 export default class Macaroon {
-    static create(location: string, secretHint: string, secret: string) {
+    static create(location: string, secretIdentifier: string, secret: string) {
         return new Macaroon(
-            MacaroonsBuilder.create(location, secretHint, secret)
+            MacaroonsBuilder.create(location, secret, secretIdentifier)
         );
     }
 
@@ -20,25 +20,20 @@ export default class Macaroon {
         return this._macaroon;
     }
 
-    verifiy(secret: string) {
+    verify(secret: string) {
         const verifier = new MacaroonsVerifier(this.macaroon);
         return verifier.isValid(secret);
     }
 
     addExactCaveat(key: string, value: string) {
-        return this.addSignedCaveat(key, '=', value);
+        return new Macaroon(
+            MacaroonsBuilder.modify(this.macaroon).add_first_party_caveat(`${key} = ${value}`).getMacaroon()
+        );
     }
-
 
     addCaveat(caveat: CaveatInterface): Macaroon {
         return new Macaroon(
             MacaroonsBuilder.modify(this.macaroon).add_first_party_caveat(caveat.asString()).getMacaroon()
-        );
-    }
-
-    addSignedCaveat(key: string, sign: string, value: string) {
-        return new Macaroon(
-            MacaroonsBuilder.modify(this.macaroon).add_first_party_caveat(`${key} ${sign} ${value}`).getMacaroon()
         );
     }
 
