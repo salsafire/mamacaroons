@@ -3,7 +3,7 @@ import { CaveatVerifierInterface } from './caveat/CaveatInterface';
 
 const MacaroonsVerifier = require('macaroons.js').MacaroonsVerifier;
 
-export default class MacaroonInspecter {
+export default class MacaroonChecker {
     private checks: (string | Function)[] = [];
 
     constructor() {

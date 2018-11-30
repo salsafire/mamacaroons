@@ -1,5 +1,5 @@
 import Macaroon from './Macaroon';
-import MacaroonInspecter from './MacaroonInspecter';
+import MacaroonChecker from './MacaroonChecker';
 import { AssignCaveat, AssignCaveatVerifier } from './caveat/AssignCaveat';
 import { ExchangeCaveat, ExchangeCaveatVerifier } from './caveat/ExchangeCaveat';
 
@@ -48,7 +48,7 @@ const easySafeMac = easyMac
 
 const caveatAssignVerifier = new AssignCaveatVerifier();
 
-const inspecter = new MacaroonInspecter()
+const checker = new MacaroonChecker()
     .addExactCheck('account', '3735928559')
     .addVerifier(caveatAssignVerifier)
     .addVerifier(require('macaroons.js').verifier.TimestampCaveatVerifier)
@@ -57,7 +57,7 @@ const inspecter = new MacaroonInspecter()
 console.log(easySafeMac.macaroon.inspect());
 console.log('Serialized: ' + easySafeMac.macaroon.serialize());
 console.log('identifier: ' + easySafeMac.macaroon.identifier);
-console.log('Valid: ' + inspecter.isValid(easySafeMac, secrets.get(easyMac.macaroon.identifier)));
+console.log('Valid: ' + checker.isValid(easySafeMac, secrets.get(easyMac.macaroon.identifier)));
 
 console.log('values assigned => ', caveatAssignVerifier.values);
 
