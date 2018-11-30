@@ -7,17 +7,16 @@ export default class MacaroonChecker {
     private checks: (string | Function)[] = [];
 
     constructor() {
-
     }
 
     addExactCheck(key: string, value: string) {
-        this.checks.push(`${key} = ${value}`);
-
-        return this;
+        return this.addVerifier(`${key} = ${value}`);
     }
 
-    addVerifier(fn: ((caveat: string) => boolean) | CaveatVerifierInterface) {
-        if (typeof fn === 'function') {
+    addVerifier(fn: ((caveat: string) => boolean) | CaveatVerifierInterface | string) {
+        if (typeof fn === 'string') {
+            this.checks.push(fn);
+        } else if (typeof fn === 'function') {
             this.checks.push(fn);
         } else {
             this.checks.push(fn.verify.bind(fn));

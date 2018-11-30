@@ -26,7 +26,7 @@ export default class Macaroon {
     }
 
     addExactCaveat(key: string, value: string) {
-        return this.addCaveatWithSign(key, value);
+        return this.addSignedCaveat(key, '=', value);
     }
 
 
@@ -36,7 +36,7 @@ export default class Macaroon {
         );
     }
 
-    addCaveatWithSign(key: string, value: string, sign = '=') {
+    addSignedCaveat(key: string, sign: string, value: string) {
         return new Macaroon(
             MacaroonsBuilder.modify(this.macaroon).add_first_party_caveat(`${key} ${sign} ${value}`).getMacaroon()
         );

@@ -42,7 +42,7 @@ console.log();
 
 const easySafeMac = easyMac
     .addExactCaveat('account', '3735928559')
-    .addCaveatWithSign('time', '2042-01-01T00:00', '<')
+    .addSignedCaveat('time', '<', '2042-01-01T00:00')
     .addCaveat(new AssignCaveat('userId', '1234'))
     .addCaveat(new ExchangeCaveat(['kraken:write', 'kraken:read', 'bitstamp:read']));
 
