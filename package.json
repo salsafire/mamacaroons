@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ts-node": "../ts3-mono-repo/node/node_modules/.bin/ts-node"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +14,10 @@
     "macaroons.js": "^0.3.8"
   },
   "devDependencies": {
-    "@types/node": "^10.12.10"
+    "@types/node": "^10.12.10",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-airbnb": "^5.11.1",
+    "typescript": "^3.1.6"
   }
 }
