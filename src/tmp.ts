@@ -3,6 +3,7 @@ import MacaroonChecker from './MacaroonChecker';
 import { AssignValueCaveat, AssignValueCaveatVerifier } from './caveat/AssignValueCaveat';
 import { ExchangeCaveat, ExchangeCaveatVerifier } from './caveat/ExchangeCaveat';
 import { TimeCaveat, TimeCaveatVerifier } from './caveat/TimeCaveat';
+import { AssignReadOnlyValueCaveat, AssignReadOnlyValueCaveatVerifier } from './caveat/AssignReadOnlyValueCaveat';
 
 const secrets = new Map()
     .set('publicSecretId1', 'you will not find me')
@@ -45,13 +46,17 @@ const easySafeMac = easyMac
     .addExactCaveat('account', '3735928559')
     .addCaveat(new TimeCaveat(new Date('2042-01-01T00:00')))
     .addCaveat(new AssignValueCaveat('userId', '1234'))
+    .addCaveat(new AssignReadOnlyValueCaveat('email', 'first@email.com'))
+    .addCaveat(new AssignReadOnlyValueCaveat('email', 'throw-error@email.com'))
     .addCaveat(new ExchangeCaveat(['kraken:write', 'kraken:read', 'bitstamp:read']));
 
 const caveatAssignValueVerifier = new AssignValueCaveatVerifier();
+const assignReadOnlyValueCaveatVerifier = new AssignReadOnlyValueCaveatVerifier();
 
 const checker = new MacaroonChecker()
     .addExactCheck('account', '3735928559')
     .addVerifier(caveatAssignValueVerifier)
+    .addVerifier(assignReadOnlyValueCaveatVerifier)
     .addVerifier(TimeCaveatVerifier.getVerifyer())
     .addVerifier(new ExchangeCaveatVerifier('kraken', 'write'));
 
@@ -61,6 +66,7 @@ console.log('identifier: ' + easySafeMac.macaroon.identifier);
 console.log('Valid: ' + checker.isValid(easySafeMac, secrets.get(easyMac.macaroon.identifier)));
 
 console.log('values assigned => ', caveatAssignValueVerifier.values);
+console.log('RO values assigned => ', assignReadOnlyValueCaveatVerifier.values);
 
 //
 //
